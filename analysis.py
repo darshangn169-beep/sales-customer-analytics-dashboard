@@ -50,15 +50,15 @@ print(top_customers)
 # Monthly Sales
 monthly_sales = df.groupby('Month')['Sales'].sum()
 
-# 🔥 Profit Ratio
+# Profit Ratio
 df['Profit Ratio'] = df['Profit'] / df['Sales']
 print("\nAverage Profit Ratio:", df['Profit Ratio'].mean())
 
-# 🔥 Loss making transactions
+# Loss making transactions
 loss_products = df[df['Profit'] < 0]
 print("\nNumber of loss-making transactions:", len(loss_products))
 
-# 🔥 Sales by Region
+# Sales by Region
 region_sales = df.groupby('Region')['Sales'].sum()
 print("\nSales by Region:")
 print(region_sales)
@@ -66,7 +66,7 @@ print(region_sales)
 region_sales.plot(kind='bar', title="Sales by Region")
 plt.show()
 
-# 🔥 Improved Monthly Trend
+# Improved Monthly Trend
 df.groupby(['Year','Month'])['Sales'].sum().plot(title="Sales Trend Over Time")
 plt.show()
 
