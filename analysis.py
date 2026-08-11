@@ -1,22 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import kagglehub
-import os
 
-# Download dataset
-path = kagglehub.dataset_download("himanshuuike/superstore-sales-dataset")
-
-print("Dataset downloaded at:", path)
-
-# Find CSV file inside downloaded folder
-files = os.listdir(path)
-print("Files:", files)
-
-# Assuming CSV file is inside
-csv_file = [f for f in files if f.endswith('.csv')][0]
-
-# Load dataset
-df = pd.read_csv(os.path.join(path, csv_file))
+# Load dataset from local file (instead of downloading from Kaggle every run)
+df = pd.read_csv("data/samplesuperstore.csv", encoding="latin1")
 
 # Show first 5 rows
 print("\nFirst 5 rows:")
@@ -58,6 +44,18 @@ print("\nAverage Profit Ratio:", df['Profit Ratio'].mean())
 loss_products = df[df['Profit'] < 0]
 print("\nNumber of loss-making transactions:", len(loss_products))
 
+# Which category has the most loss-making transactions?
+print("\nLoss-making transactions by Category:")
+print(loss_products.groupby('Category').size().sort_values(ascending=False))
+
+print("\nLoss-making transactions by Region:")
+print(loss_products.groupby('Region').size().sort_values(ascending=False))
+
+# Does discount level relate to losses?
+print("\nAverage Discount: Profitable vs Loss-making transactions")
+print("Profitable orders avg discount:", df[df['Profit'] >= 0]['Discount'].mean())
+print("Loss-making orders avg discount:", df[df['Profit'] < 0]['Discount'].mean())
+
 # Sales by Region
 region_sales = df.groupby('Region')['Sales'].sum()
 print("\nSales by Region:")
@@ -66,8 +64,8 @@ print(region_sales)
 region_sales.plot(kind='bar', title="Sales by Region")
 plt.show()
 
-# Improved Monthly Trend
-df.groupby(['Year','Month'])['Sales'].sum().plot(title="Sales Trend Over Time")
+# Monthly Trend (Year + Month combined)
+df.groupby(['Year', 'Month'])['Sales'].sum().plot(title="Sales Trend Over Time")
 plt.show()
 
 # Graphs
